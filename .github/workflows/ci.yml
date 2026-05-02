@@ -7,8 +7,7 @@
 #   DEPLOY_SSH_KEY    — clé privée SSH (contenu complet PEM/OpenSSH)
 #   DEPLOY_PATH       — chemin absolu du dépôt sur le serveur (ex. /var/www/authcard)
 #
-# Sur le serveur (une fois) : clone du dépôt, .env, droits storage/bootstrap/cache,
-# PHP 8.1+, Composer, Node.js 18+ et npm (pour npm ci && npm run build).
+# Sur le serveur (une fois) : clone du dépôt, .env, droits storage/bootstrap/cache, PHP 8.1+, Composer.
 name: CI / CD
 
 on:
@@ -89,12 +88,6 @@ jobs:
             git fetch origin "$BRANCH"
             git checkout "$BRANCH"
             git reset --hard "origin/$BRANCH"
-            if ! command -v npm >/dev/null 2>&1; then
-              echo "::error::npm est introuvable sur le serveur. Installez Node.js 18+ (ex. nvm ou paquets système)."
-              exit 1
-            fi
-            npm ci
-            npm run build
             composer install --no-dev --optimize-autoloader --no-interaction
             php artisan migrate --force --no-interaction
             php artisan storage:link 2>/dev/null || true

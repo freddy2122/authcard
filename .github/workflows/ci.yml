@@ -1,11 +1,22 @@
-# Tests Laravel à chaque push / PR sur main ou master
-name: CI
+# CI : tests à chaque push / PR sur main.
+# CD : déploiement SSH après tests OK sur push vers main, ou manuel (Actions → CI / CD → Run workflow).
+#
+# Secrets GitHub (Settings → Secrets and variables → Actions) :
+#   DEPLOY_HOST       — IP ou domaine du serveur
+#   DEPLOY_USER       — utilisateur SSH (ex. deploy, ubuntu)
+#   DEPLOY_SSH_KEY    — clé privée SSH (contenu complet PEM/OpenSSH)
+#   DEPLOY_PATH       — chemin absolu du dépôt sur le serveur (ex. /var/www/authcard)
+#
+# Sur le serveur (une fois) : clone du dépôt, .env, droits storage/bootstrap/cache,
+# PHP 8.1+, Composer, Node.js 18+ et npm (pour npm ci && npm run build).
+name: CI / CD
 
 on:
   push:
     branches: [main, master]
   pull_request:
     branches: [main, master]
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -53,3 +64,40 @@ jobs:
           DB_CONNECTION: sqlite
           DB_DATABASE: ':memory:'
         run: php artisan test
+
+  deploy:
+    needs: tests
+    if: |
+      needs.tests.result == 'success' &&
+      (github.event_name == 'workflow_dispatch' ||
+       (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')))
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script_stop: true
+          script: |
+            set -euo pipefail
+            BRANCH="${{ github.ref_name }}"
+            cd "${{ secrets.DEPLOY_PATH }}"
+            git fetch origin "$BRANCH"
+            git checkout "$BRANCH"
+            git reset --hard "origin/$BRANCH"
+            if ! command -v npm >/dev/null 2>&1; then
+              echo "::error::npm est introuvable sur le serveur. Installez Node.js 18+ (ex. nvm ou paquets système)."
+              exit 1
+            fi
+            npm ci
+            npm run build
+            composer install --no-dev --optimize-autoloader --no-interaction
+            php artisan migrate --force --no-interaction
+            php artisan storage:link 2>/dev/null || true
+            php artisan optimize
+            php artisan view:cache
+            php artisan queue:restart 2>/dev/null || true

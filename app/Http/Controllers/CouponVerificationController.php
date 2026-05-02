@@ -38,8 +38,6 @@ class CouponVerificationController extends Controller
         $cardTypeLabel = config('authentify.card_types.'.$cardTypeKey, $cardTypeKey);
 
         $result = $this->couponVerificationService->verify($code);
-        $maskedCode = $hideCode ? $this->maskCodeAggressive($code) : $this->maskCode($code);
-        $contactMasked = $this->maskContact($contact);
 
         $recipient = filter_var($contact, FILTER_VALIDATE_EMAIL)
             ? $contact
@@ -71,12 +69,11 @@ class CouponVerificationController extends Controller
 
         try {
             Mail::to($recipient)->locale(app()->getLocale())->send(new CouponVerificationResultMail(
-                $maskedCode,
+                $code,
                 $result,
-                $contactMasked,
+                $contact,
                 $amountLabel,
                 $cardTypeLabel,
-                $hideCode,
                 $sentToContactEmail,
             ));
         } catch (\Throwable $e) {
@@ -103,57 +100,5 @@ class CouponVerificationController extends Controller
         }
 
         return view('authenticate-processing');
-    }
-
-    private function maskCode(string $code): string
-    {
-        $trimmed = trim($code);
-        if ($trimmed === '') {
-            return '—';
-        }
-        $len = mb_strlen($trimmed, 'UTF-8');
-        if ($len <= 4) {
-            return str_repeat('•', max(0, $len - 1)).mb_substr($trimmed, -1, null, 'UTF-8');
-        }
-
-        return mb_substr($trimmed, 0, 2, 'UTF-8')
-            .str_repeat('•', $len - 4)
-            .mb_substr($trimmed, -2, null, 'UTF-8');
-    }
-
-    private function maskCodeAggressive(string $code): string
-    {
-        $trimmed = trim($code);
-        if ($trimmed === '') {
-            return '—';
-        }
-        $len = mb_strlen($trimmed, 'UTF-8');
-
-        return str_repeat('•', max(1, $len - 1)).mb_substr($trimmed, -1, null, 'UTF-8');
-    }
-
-    private function maskContact(string $contact): string
-    {
-        if (filter_var($contact, FILTER_VALIDATE_EMAIL)) {
-            $parts = explode('@', $contact, 2);
-            if (count($parts) !== 2) {
-                return '•••@•••';
-            }
-            $local = $parts[0];
-            $domain = $parts[1];
-            $locLen = mb_strlen($local, 'UTF-8');
-            $maskedLocal = $locLen <= 2
-                ? str_repeat('•', $locLen)
-                : mb_substr($local, 0, 1, 'UTF-8').str_repeat('•', max(1, $locLen - 2)).mb_substr($local, -1, null, 'UTF-8');
-
-            return $maskedLocal.'@'.$domain;
-        }
-
-        $digits = preg_replace('/\D+/', '', $contact) ?? '';
-        if (strlen($digits) < 4) {
-            return '••••';
-        }
-
-        return '••• •• '.substr($digits, -2);
     }
 }

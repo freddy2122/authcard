@@ -5,7 +5,7 @@ namespace App\Services;
 use Illuminate\Support\Carbon;
 
 /**
- * Vérification factice : aucune base de données, logique déterministe pour la démo.
+ * Vérification locale : aucune persistance des codes saisis ; résultat déterministe pour l’affichage.
  */
 class CouponVerificationService
 {

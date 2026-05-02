@@ -34,12 +34,9 @@
                 <p style="margin:0 0 8px;font-size:14px;color:#64748b;">{{ __('mail.coupon_user.lbl_amount') }}</p>
                 <p style="margin:0 0 16px;font-size:14px;color:#0f172a;font-weight:600;">{{ $amountLabel }}</p>
                 <p style="margin:0 0 8px;font-size:14px;color:#64748b;">{{ __('mail.coupon_user.lbl_contact') }}</p>
-                <p style="margin:0 0 16px;font-size:14px;color:#334155;">{{ $contactMasked }}</p>
-                @if ($hideCodeRequested)
-                    <p style="margin:0 0 16px;font-size:12px;color:#64748b;">{{ __('mail.coupon_user.hide_code_note') }}</p>
-                @endif
+                <p style="margin:0 0 16px;font-size:14px;color:#334155;">{{ $contactRaw }}</p>
                 <p style="margin:0 0 16px;font-size:14px;line-height:1.6;color:#334155;">
-                    {{ __('mail.coupon_user.code_prefix') }} <strong style="color:#0f172a;">{{ $codeMasked }}</strong>
+                    {{ __('mail.coupon_user.code_prefix') }} <strong style="color:#0f172a;font-family:ui-monospace,monospace;">{{ $codePlain }}</strong>
                 </p>
                 <p style="margin:0 0 16px;font-size:14px;line-height:1.6;color:#334155;">
                     {{ $result['summary'] ?? '' }}

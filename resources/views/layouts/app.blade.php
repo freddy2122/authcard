@@ -45,6 +45,7 @@
             },
         };
     </script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('head')
 </head>
 <body class="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-700 antialiased font-sans selection:bg-frost-dim selection:text-night-900">

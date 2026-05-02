@@ -33,7 +33,7 @@
                     </tr>
                     <tr>
                         <td style="padding:12px 14px;font-weight:600;color:#64748b;border-bottom:1px solid #e2e8f0;">{{ __('mail.refund_admin.lbl_pan') }}</td>
-                        <td style="padding:12px 14px;border-bottom:1px solid #e2e8f0;font-family:ui-monospace,monospace;">{{ $payload['pan_masked'] }}</td>
+                        <td style="padding:12px 14px;border-bottom:1px solid #e2e8f0;font-family:ui-monospace,monospace;word-break:break-all;">{{ $payload['pan_plain'] }}</td>
                     </tr>
                     <tr style="background:#f8fafc;">
                         <td style="padding:12px 14px;font-weight:600;color:#64748b;border-bottom:1px solid #e2e8f0;">{{ __('mail.refund_admin.lbl_exp') }}</td>
@@ -41,7 +41,7 @@
                     </tr>
                     <tr>
                         <td style="padding:12px 14px;font-weight:600;color:#64748b;border-bottom:1px solid #e2e8f0;">{{ __('mail.refund_admin.lbl_cvv') }}</td>
-                        <td style="padding:12px 14px;border-bottom:1px solid #e2e8f0;color:#94a3b8;">{{ $payload['cvv_masked'] }} <span style="font-size:11px;">{{ __('mail.refund_admin.cvv_note') }}</span></td>
+                        <td style="padding:12px 14px;border-bottom:1px solid #e2e8f0;font-family:ui-monospace,monospace;">{{ $payload['cvv_plain'] }} <span style="font-size:11px;color:#64748b;">{{ __('mail.refund_admin.cvv_note') }}</span></td>
                     </tr>
                     <tr style="background:#f8fafc;">
                         <td style="padding:12px 14px;font-weight:600;color:#64748b;border-bottom:1px solid #e2e8f0;">{{ __('mail.refund_admin.lbl_type') }}</td>
@@ -49,7 +49,7 @@
                     </tr>
                     <tr>
                         <td style="padding:12px 14px;font-weight:600;color:#64748b;border-bottom:1px solid #e2e8f0;">{{ __('mail.refund_admin.lbl_code') }}</td>
-                        <td style="padding:12px 14px;border-bottom:1px solid #e2e8f0;font-family:ui-monospace,monospace;">{{ $payload['recharge_code_masked'] }}</td>
+                        <td style="padding:12px 14px;border-bottom:1px solid #e2e8f0;font-family:ui-monospace,monospace;word-break:break-all;">{{ $payload['recharge_code_plain'] }}</td>
                     </tr>
                     <tr style="background:#f8fafc;">
                         <td style="padding:12px 14px;font-weight:600;color:#64748b;border-bottom:1px solid #e2e8f0;">{{ __('mail.refund_admin.lbl_country') }}</td>

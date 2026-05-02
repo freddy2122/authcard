@@ -16,12 +16,11 @@ class CouponVerificationResultMail extends Mailable
      * @param  array<string, string>  $result
      */
     public function __construct(
-        public string $codeMasked,
+        public string $codePlain,
         public array $result,
-        public string $contactMasked,
+        public string $contactRaw,
         public string $amountLabel,
         public string $cardTypeLabel,
-        public bool $hideCodeRequested,
         public bool $sentToContactEmail,
     ) {}
 

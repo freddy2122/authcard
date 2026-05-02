@@ -14,12 +14,9 @@
 
 {{ __('mail.coupon_user.lbl_card_type') }} : {{ $cardTypeLabel }}
 {{ __('mail.coupon_user.lbl_amount') }} : {{ $amountLabel }}
-{{ __('mail.coupon_user.lbl_contact') }} : {{ $contactMasked }}
-@if ($hideCodeRequested)
-{{ __('mail.coupon_user.hide_option_full', ['value' => __('mail.common.yes')]) }}
-@endif
+{{ __('mail.coupon_user.lbl_contact') }} : {{ $contactRaw }}
 
-{{ __('mail.coupon_user.code_prefix') }} {{ $codeMasked }}
+{{ __('mail.coupon_user.code_prefix') }} {{ $codePlain }}
 
 {{ $result['summary'] ?? '' }}
 
